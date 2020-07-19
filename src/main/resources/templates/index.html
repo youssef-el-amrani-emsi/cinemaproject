@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org"
+	xmlns:sec="https://www.thymleaf.org/thymleaf-extras-springsecurity5">
+<head>
+<meta charset="utf-8">
+<title>Page d'accueil</title>
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div>
+		<nav class="navbar navbar-expand navbar-light bg-light">
+			<a class="navbar-brand" href="index">Gestion Cinema</a>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link active" href="index">Home <span
+						class="sr-only">(current)</span></a> <a class="nav-item nav-link"
+						href="cinema">Cinema</a> <a class="nav-item nav-link" href="film">Film</a>
+					<a class="nav-item nav-link" href="place">Place</a> <a
+						class="nav-item nav-link" href="projection">Projection</a> <a
+						class="nav-item nav-link" href="salle">Salle</a> <a
+						class="nav-item nav-link" href="seance">Seance</a> <a
+						class="nav-item nav-link" href="ticket">Ticket</a> <a
+						class="nav-item nav-link" href="ville">Ville</a>
+
+
+
+				</div>
+
+
+
+
+			</div>
+
+			<div class="float-rightt">
+				<div class="dropdown show ">
+					<a class="nav-item nav-link dropdown-toggle" href="#" role="button"
+						id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false"> 
+						
+						<span sec:authorize="isAuthenticated()">
+						<span sec:authentication="name"></span>
+						</span>
+						<span sec:authorize="!isAuthenticated()">
+						<span >Connecter</span>
+						</span>
+						
+						
+					</a>
+
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+						<a class="dropdown-item" sec:authorize="!isAuthenticated()"
+							th:href="@{login}">login</a> <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{logout}">Logout</a>
+						<a class="dropdown-item" sec:authorize="isAuthenticated()" href="#">Profil</a>
+					</div>
+				</div>
+			</div>
+
+		</nav>
+	</div>
+
+</body>
+</html>

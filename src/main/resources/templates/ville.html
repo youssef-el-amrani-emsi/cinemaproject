@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org"
+	xmlns:sec="https://www.thymleaf.org/thymleaf-extras-springsecurity5">
+<head>
+<meta charset="utf-8">
+<title>Villes</title>
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	<div>
+		<nav class="navbar navbar-expand navbar-light bg-light">
+			<a class="navbar-brand" href="index">Gestion Cinema</a>
+			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				<div class="navbar-nav">
+					<a class="nav-item nav-link " href="index">Home</a> <a
+						class="nav-item nav-link" href="cinema">Cinema</a> <a
+						class="nav-item nav-link" href="film">Film</a> <a
+						class="nav-item nav-link" href="place">Place</a> <a
+						class="nav-item nav-link" href="projection">Projection</a> <a
+						class="nav-item nav-link" href="salle">Salle</a> <a
+						class="nav-item nav-link" href="seance">Seance</a> <a
+						class="nav-item nav-link" href="ticket">Ticket</a> <a
+						class="nav-item nav-link active" href="ville">Ville</a>
+
+				</div>
+			</div>
+			<div class="float-rightt">
+				<div class="dropdown show ">
+					<a class="nav-item nav-link dropdown-toggle" href="#" role="button"
+						id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false"> <span sec:authentication="name"></span>
+					</a>
+
+					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+						<a class="dropdown-item" sec:authorize="!isAuthenticated()"
+							th:href="@{login}">login</a> <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{logout}">Logout</a>
+						<a class="dropdown-item" sec:authorize="isAuthenticated()" href="#">Profil</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</div>
+
+
+
+
+	<div class="container mt-4">
+		<div class="card">
+			<div class="card-header">Liste de villes</div>
+			<div class="card-body">
+				<form class="form-inline" th:action="@{ville}" method="get">
+					<div class="form-group mb-2 ml-2 mr-2">
+						<label>nom ville :</label> <input type="text" class="form-control"
+							name="name" th:value="${name}" />
+					</div>
+
+					<button type="submit" class="btn btn-primary mb-2">
+						<svg class="bi bi-search" width="1em" height="1em"
+							viewBox="0 0 16 16" fill="currentColor"
+							xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+								d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z" />
+                            <path fill-rule="evenodd"
+								d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z" />
+                        </svg>
+					</button>
+					<button sec:authorize="hasRole('ROLE_ADMIN')" type="button"
+						class="btn btn-success mb-2 ml-4" data-toggle="modal"
+						data-target="#ajouter">
+						<svg class="bi bi-plus-square" width="1em" height="1em"
+							viewBox="0 0 16 16" fill="currentColor"
+							xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+								d="M8 3.5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-.5.5H4a.5.5 0 0 1 0-1h3.5V4a.5.5 0 0 1 .5-.5z" />
+                            <path fill-rule="evenodd"
+								d="M7.5 8a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0V8z" />
+                            <path fill-rule="evenodd"
+								d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z" />
+                        </svg>
+					</button>
+				</form>
+				<div class="row mb-3 ml-3 mr-3 mt-2 ">
+					<div class="col-md-3 themed-grid-col">
+						<strong>name</strong>
+					</div>
+
+					<div class="col-md-2 themed-grid-col"></div>
+					<div class="col-md-2 themed-grid-col"></div>
+				</div>
+				<div class=" ml-3 mr-3 mb-0 alert border-top "
+					th:each="v:${pageVilles.Content}">
+					<div class="row">
+						<div class="col-md-3 themed-grid-col" th:text="${v.name}"></div>
+
+						<div class="col-md-2 themed-grid-col">
+							<a sec:authorize="hasRole('ROLE_ADMIN')"
+								onClick="javascript:return confirm('Etes vous sûre ?')"
+								class="btn btn-danger"
+								th:href="@{deleteVille(id=${v.id},page=${currentPage},size=${size},name=${name})}">
+								<svg class="bi bi-trash" width="1em" height="1em"
+									viewBox="0 0 16 16" fill="currentColor"
+									xmlns="http://www.w3.org/2000/svg">
+                                <path
+										d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z" />
+                                <path fill-rule="evenodd"
+										d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z" />
+                            </svg>
+							</a>
+						</div>
+						<div class="col-md-2 themed-grid-col">
+							<a sec:authorize="hasRole('ROLE_ADMIN')"
+								th:onclick="|myFunction(${v.id})|" class="btn btn-warning"><svg
+									class="bi bi-pencil-square" width="1em" height="1em"
+									viewBox="0 0 16 16" fill="currentColor"
+									xmlns="http://www.w3.org/2000/svg">
+                                <path
+										d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                <path fill-rule="evenodd"
+										d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
+                            </svg></a>
+						</div>
+					</div>
+					<div th:id=" 'update' + ${v.id}" style="Display: none"
+						class="mt-3 col-4">
+						<form th:action="@{updateVille}" method="get">
+							<div class="form-row">
+								<div class="col">
+									<input type="text" name="nv" th:value="${v.name}"
+										class="form-control">
+								</div>
+
+
+								<div style="Display: none">
+									<input type="text" name="page" th:value="${currentPage}">
+									<input type="text" name="name" th:value="${name}"> <input
+										type="text" name="size" th:value="${size}"> <input
+										type="text" name="id" th:value="${v.id}">
+								</div>
+								<button class="btn btn-success ml-5">
+									<svg class="bi bi-check2" width="1.2em" height="1.2em"
+										viewBox="0 0 16 16" fill="currentColor"
+										xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+											d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+                                    </svg>
+								</button>
+							</div>
+						</form>
+					</div>
+				</div>
+				<ul class="pagination ">
+					<li th:each="page,status:${pages}"
+						th:class="${status.index==currentPage?' page-item active ':' page-item'}">
+						<a class="page-link"
+						th:href="@{ville(page=${status.index}, size=${size}, name=${name})}"
+						th:text="${status.index}"></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="ajouter" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Ajouter une ville</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form th:action="@{addVille}" method="get">
+						<div class="form-group">
+							<label>Nom ville</label> <input name="nv" type="text"
+								class="form-control" placeholder="nom ville">
+						</div>
+
+
+						<div style="Display: none">
+							<input class="col-1" type="text" name="page"
+								th:value="${currentPage}" /> <input class="col-1" type="text"
+								name="name" th:value="${name}" /> <input class="col-1"
+								type="text" name="size" th:value="${size}" />
+						</div>
+						<div class="row justify-content-end">
+							<button type="button" class="btn btn-secondary mr-2"
+								data-dismiss="modal">Annuler</button>
+							<button type="submit" class="btn btn-primary mr-3 col-3">Ajouter</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+	<script>
+		function myFunction(id) {
+			var o = "update";
+			var p = o.concat(id);
+			var x = document.getElementById(p);
+			if (x.style.display === "none") {
+				x.style.display = "block";
+			} else {
+				x.style.display = "none";
+			}
+		}
+	</script>
+
+
+</body>
+</html>

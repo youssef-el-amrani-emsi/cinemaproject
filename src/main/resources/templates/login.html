@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	>
+<head>
+<meta charset="utf-8">
+<title>Form categories</title>
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+</head>
+<body>
+	
+	<div class="container" style="margin-top:100px">
+	<div class="col-md-6 offset-md-3">
+		<div class="card">
+			<div class="card-header" style="background:#82E0AA;">Authentication</div>
+			<div class="card-body">
+				<form th:action="@{login}" method="post">
+					<div class="form-group">
+						<label for="username" class="form-control-label">Username:</label>
+						<input type="text" class="form-control" name="username"
+							id="username"> <span></span>
+					</div>
+					<div class="form-group">
+						<label for="password" class="form-control-label">Password:</label>
+						<input type="password" class="form-control" name="password"
+							id="password"> <span></span>
+					</div>
+
+
+					<button class="btn btn-success" type="submit">Login</button>
+				</form>
+			</div>
+			</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

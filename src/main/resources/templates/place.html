@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeLeaf.org"
+	xmlns:sec="https://www.thymleaf.org/thymleaf-extras-springsecurity5">
+<head>
+<meta charset="utf-8">
+<title>Places</title>
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
+	<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.1.0/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+	
+</head>
+<body>
+	<div>
+		<nav class="navbar navbar-expand navbar-light bg-light">
+ 			<a class="navbar-brand" href="index">Gestion Cinema</a>
+ 			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    		<div class="navbar-nav">
+      			<a class="nav-item nav-link " href="index">Home <span class="sr-only">(current)</span></a>
+      			<a class="nav-item nav-link" href="cinema">Cinema</a>
+      			<a class="nav-item nav-link" href="film">Film</a>
+      			<a class="nav-item nav-link active" href="place">Place</a>
+      			<a class="nav-item nav-link" href="projection">Projection</a>
+      			<a class="nav-item nav-link" href="salle">Salle</a>
+      			<a class="nav-item nav-link" href="seance">Seance</a>
+      			<a class="nav-item nav-link " href="ticket">Ticket</a>
+      			<a class="nav-item nav-link" href="ville">Ville</a>  
+                    
+    		</div>
+  			</div>
+            <div class="float-rightt">
+					<div class="dropdown show ">
+						<a class="nav-item nav-link dropdown-toggle" href="#"
+							role="button" id="dropdownMenuLink" data-toggle="dropdown"
+							aria-haspopup="true" aria-expanded="false"> <span sec:authentication="name"></span> </a>
+
+						<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+							<a class="dropdown-item" sec:authorize="!isAuthenticated()" th:href="@{login}">login</a> <a
+								class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{logout}">Logout</a> <a
+								class="dropdown-item" sec:authorize="isAuthenticated()" href="#">Profil</a>
+						</div>
+					</div>
+					</div>
+		</nav>
+	</div>
+
+	
+    
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">Liste de Places</div>
+            <div class="card-body">
+                
+                <div class="row mb-3 ml-3 mr-3 mt-2 ">
+                    <div class="col-md-3 themed-grid-col"><strong>numero</strong></div>
+                    <div class="col-md-3 themed-grid-col"><strong>salle</strong></div>
+                    <div class="col-md-3 themed-grid-col"><strong>cinema</strong></div>
+                    <div class="col-md-3 themed-grid-col"><strong>ville</strong></div>
+                    <div class="col-md-2 themed-grid-col"></div>
+                    <div class="col-md-2 themed-grid-col"></div>
+                </div>
+                <div class=" ml-3 mr-3 mb-0 alert border-top " th:each="p:${placePages.Content}">
+                	<div class="row">
+                    <div class="col-md-3 themed-grid-col" th:text="${p.numero}"></div>
+                    <div class="col-md-3 themed-grid-col" th:text="${p.salle.name}"></div>
+                    <div class="col-md-3 themed-grid-col" th:text="${p.salle.cinema.name}"></div>
+                    <div class="col-md-3 themed-grid-col" th:text="${p.salle.cinema.ville.name}"></div>
+                    
+                    </div>
+                    
+                </div>
+                <ul class="pagination d-flex flex-wrap  ">
+                    <li th:each="page,status:${pages}"
+                        th:class="${status.index==currentPage?' page-item active ':' page-item'}">
+                        <a class="page-link" th:href="@{place(ids=${ids},page=${status.index}, size=${size}, name=${name})}"
+                            th:text="${status.index}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    
+
+	
+</body>
+</html>
